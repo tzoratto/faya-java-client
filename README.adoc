@@ -1,0 +1,31 @@
+= Faya Java Client
+
+== Usage
+
+Configure FayaInstance::
+[source, java]
+----
+FayaInstance faya = new FayaInstance("https://faya.domain.com", "<API_KEY_ID>:<API_KEY_SECRET>");
+----
+
+Create a namespace and a token::
+[source, java]
+----
+Namespace ns1 = new Namespace();
+ns1.setName("my first namespace");
+faya.save(ns1);
+
+Token tk1 = new Token();
+tk1.setNamespace(ns1.getId());
+faya.save(tk1);
+----
+
+Check a token::
+[source, java]
+----
+if (faya.check("<TOKEN_VALUE>", "<NAMESPACE_NAME>")) {
+    // OK, do some stuff
+} else {
+    // This token is invalid against this namespace
+}
+----
