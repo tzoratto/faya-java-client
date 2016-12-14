@@ -42,6 +42,12 @@ public class Token {
         this.namespace = namespace;
     }
 
+    public void setNamespace(Namespace namespace) {
+        if (namespace != null) {
+            this.namespace = namespace.getId();
+        }
+    }
+
     public String getValue() {
         return value;
     }

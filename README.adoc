@@ -16,7 +16,7 @@ ns1.setName("my first namespace");
 faya.save(ns1);
 
 Token tk1 = new Token();
-tk1.setNamespace(ns1.getId());
+tk1.setNamespace(ns1);
 faya.save(tk1);
 ----
 
