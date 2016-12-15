@@ -21,7 +21,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.Base64;
 
 class HttpClientImpl implements HttpClient {
-    private static final Logger logger = LoggerFactory.getLogger(HttpClientImpl.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HttpClientImpl.class);
 
     private final Client client;
     private final ObjectMapper mapper;
@@ -35,24 +35,28 @@ class HttpClientImpl implements HttpClient {
                 .configure(SerializationFeature.WRITE_DATE_TIMESTAMPS_AS_NANOSECONDS, false);
     }
 
+    @Override
     public <T> Response<T> get(String endpoint, String authorization, final Class<T> clazz) throws FayaException {
         javax.ws.rs.core.Response response = this.prepareRequest(endpoint, authorization)
                 .get();
         return getResponse(response, clazz);
     }
 
+    @Override
     public <T> Response<T> post(String endpoint, String authorization, T data, final Class<T> clazz) throws FayaException {
         javax.ws.rs.core.Response response = this.prepareRequest(endpoint, authorization)
                 .post(Entity.json(objectToJsonString(data)));
         return getResponse(response, clazz);
     }
 
+    @Override
     public <T> Response<T> put(String endpoint, String authorization, T data, final Class<T> clazz) throws FayaException {
         javax.ws.rs.core.Response response = this.prepareRequest(endpoint, authorization)
                 .put(Entity.json(objectToJsonString(data)));
         return getResponse(response, clazz);
     }
 
+    @Override
     public <T> Response<T> delete(String endpoint, String authorization, final Class<T> clazz) throws FayaException {
         javax.ws.rs.core.Response response = this.prepareRequest(endpoint, authorization)
                 .delete();
@@ -63,7 +67,7 @@ class HttpClientImpl implements HttpClient {
         String dataString;
         try {
             dataString = mapper.writer().writeValueAsString(data);
-            logger.debug(dataString);
+            LOGGER.debug(dataString);
         } catch (JsonProcessingException e) {
             throw new FayaException("Error during serialization", e);
         }
@@ -71,7 +75,7 @@ class HttpClientImpl implements HttpClient {
     }
 
     private Invocation.Builder prepareRequest(String endpoint, String authorization) throws FayaException {
-        logger.info(endpoint);
+        LOGGER.info(endpoint);
         String base64Authorization;
         try {
             base64Authorization = Base64.getEncoder().encodeToString(authorization.getBytes("utf-8"));
@@ -87,7 +91,7 @@ class HttpClientImpl implements HttpClient {
         if (response.getStatus() != 200) {
             try {
                 String resString = response.readEntity(String.class);
-                logger.debug(resString);
+                LOGGER.debug(resString);
                 Response res = mapper.readerFor(Response.class).readValue(resString);
                 throw new FayaException(res.getMessage() + " - " + res.getData());
             } catch (IOException e) {
@@ -100,7 +104,7 @@ class HttpClientImpl implements HttpClient {
         this.handleError(response);
         try {
             String res = response.readEntity(String.class);
-            logger.debug(res);
+            LOGGER.debug(res);
             return mapper.readerFor(mapper.getTypeFactory().constructParametricType(Response.class, clazz)).readValue(res);
         } catch (IOException e) {
             throw new FayaException("Error during deserialization", e);

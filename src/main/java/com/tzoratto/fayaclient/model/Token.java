@@ -20,6 +20,7 @@ public class Token {
     private Instant updatedAt;
 
     public Token() {
+        // Empty constructor
     }
 
     public Token(String id) {
@@ -118,5 +119,21 @@ public class Token {
 
     public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public void populate(Token t) {
+        if (t != null) {
+            this.id = t.id;
+            this.description = t.description;
+            this.active = t.active;
+            this.namespace = t.namespace;
+            this.count = t.count;
+            this.createdAt = t.createdAt;
+            this.endsAt = t.endsAt;
+            this.pool = t.pool;
+            this.updatedAt = t.updatedAt;
+            this.value = t.value;
+            this.startsAt = t.startsAt;
+        }
     }
 }

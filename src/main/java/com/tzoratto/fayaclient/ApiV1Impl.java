@@ -53,54 +53,28 @@ class ApiV1Impl implements Api {
     public void createNamespace(Namespace namespace) throws FayaException {
         String url = fullUrl(NAMESPACE_ENDPOINT, null, null);
         Namespace ns = this.httpClient.post(url, authorization, namespace, Namespace.class).getData();
-        namespace.setId(ns.getId());
-        namespace.setDescription(ns.getDescription());
-        namespace.setName(ns.getName());
-        namespace.setUser(ns.getUser());
+        namespace.populate(ns);
     }
 
     @Override
     public void updateNamespace(Namespace namespace) throws FayaException {
         String url = fullUrl(NAMESPACE_ENDPOINT, namespace.getId(), null);
         Namespace ns = this.httpClient.put(url, authorization, namespace, Namespace.class).getData();
-        namespace.setId(ns.getId());
-        namespace.setDescription(ns.getDescription());
-        namespace.setName(ns.getName());
-        namespace.setUser(ns.getUser());
+        namespace.populate(ns);
     }
 
     @Override
     public void createToken(Token token) throws FayaException {
         String url = fullUrl(TOKEN_ENDPOINT, null, null);
         Token t = this.httpClient.post(url, authorization, token, Token.class).getData();
-        token.setId(t.getId());
-        token.setDescription(t.getDescription());
-        token.setActive(t.getActive());
-        token.setNamespace(t.getNamespace());
-        token.setCount(t.getCount());
-        token.setCreatedAt(t.getCreatedAt());
-        token.setEndsAt(t.getEndsAt());
-        token.setPool(t.getPool());
-        token.setUpdatedAt(t.getUpdatedAt());
-        token.setValue(t.getValue());
-        token.setStartsAt(t.getStartsAt());
+        token.populate(t);
     }
 
     @Override
     public void updateToken(Token token) throws FayaException {
         String url = fullUrl(TOKEN_ENDPOINT, token.getId(), null);
         Token t = this.httpClient.put(url, authorization, token, Token.class).getData();
-        token.setId(t.getId());
-        token.setDescription(t.getDescription());
-        token.setActive(t.getActive());
-        token.setNamespace(t.getNamespace());
-        token.setCount(t.getCount());
-        token.setCreatedAt(t.getCreatedAt());
-        token.setEndsAt(t.getEndsAt());
-        token.setPool(t.getPool());
-        token.setUpdatedAt(t.getUpdatedAt());
-        token.setValue(t.getValue());
-        token.setStartsAt(t.getStartsAt());
+        token.populate(t);
     }
 
     @Override

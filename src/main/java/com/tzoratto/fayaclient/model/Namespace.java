@@ -11,7 +11,7 @@ public class Namespace {
     private String description;
 
     public Namespace() {
-
+        // Empty constructor
     }
 
     public Namespace(String id) {
@@ -48,5 +48,14 @@ public class Namespace {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public void populate(Namespace n) {
+        if (n != null) {
+            this.id = n.id;
+            this.description = n.description;
+            this.name = n.name;
+            this.user = n.user;
+        }
     }
 }
