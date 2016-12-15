@@ -6,14 +6,15 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
 import com.tzoratto.fayaclient.exception.FayaException;
 import com.tzoratto.fayaclient.model.Response;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.ws.rs.client.Client;
+import javax.ws.rs.client.ClientBuilder;
+import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.Invocation;
 import javax.ws.rs.core.MediaType;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -26,7 +27,7 @@ class HttpClientImpl implements HttpClient {
     private final ObjectMapper mapper;
 
     HttpClientImpl() {
-        this.client = Client.create();
+        this.client = ClientBuilder.newClient();
         this.mapper = new ObjectMapper()
                 .registerModule(new JavaTimeModule())
                 .setSerializationInclusion(JsonInclude.Include.NON_NULL)
@@ -35,26 +36,26 @@ class HttpClientImpl implements HttpClient {
     }
 
     public <T> Response<T> get(String endpoint, String authorization, final Class<T> clazz) throws FayaException {
-        ClientResponse response = this.prepareRequest(endpoint, authorization)
-                .get(ClientResponse.class);
+        javax.ws.rs.core.Response response = this.prepareRequest(endpoint, authorization)
+                .get();
         return getResponse(response, clazz);
     }
 
     public <T> Response<T> post(String endpoint, String authorization, T data, final Class<T> clazz) throws FayaException {
-        ClientResponse response = this.prepareRequest(endpoint, authorization)
-                .post(ClientResponse.class, objectToJsonString(data));
+        javax.ws.rs.core.Response response = this.prepareRequest(endpoint, authorization)
+                .post(Entity.json(objectToJsonString(data)));
         return getResponse(response, clazz);
     }
 
     public <T> Response<T> put(String endpoint, String authorization, T data, final Class<T> clazz) throws FayaException {
-        ClientResponse response = this.prepareRequest(endpoint, authorization)
-                .put(ClientResponse.class, objectToJsonString(data));
+        javax.ws.rs.core.Response response = this.prepareRequest(endpoint, authorization)
+                .put(Entity.json(objectToJsonString(data)));
         return getResponse(response, clazz);
     }
 
     public <T> Response<T> delete(String endpoint, String authorization, final Class<T> clazz) throws FayaException {
-        ClientResponse response = this.prepareRequest(endpoint, authorization)
-                .delete(ClientResponse.class);
+        javax.ws.rs.core.Response response = this.prepareRequest(endpoint, authorization)
+                .delete();
         return getResponse(response, clazz);
     }
 
@@ -69,7 +70,7 @@ class HttpClientImpl implements HttpClient {
         return dataString;
     }
 
-    private WebResource.Builder prepareRequest(String endpoint, String authorization) throws FayaException {
+    private Invocation.Builder prepareRequest(String endpoint, String authorization) throws FayaException {
         logger.info(endpoint);
         String base64Authorization;
         try {
@@ -77,16 +78,15 @@ class HttpClientImpl implements HttpClient {
         } catch (UnsupportedEncodingException e) {
             throw new FayaException("Bad credentials", e);
         }
-        return this.client.resource(endpoint)
-                .accept(MediaType.APPLICATION_JSON_TYPE)
-                .type(MediaType.APPLICATION_JSON_TYPE)
+        return this.client.target(endpoint)
+                .request(MediaType.APPLICATION_JSON_TYPE)
                 .header("Authorization", "Basic: " + base64Authorization);
     }
 
-    private void handleError(ClientResponse response) throws FayaException {
+    private void handleError(javax.ws.rs.core.Response response) throws FayaException {
         if (response.getStatus() != 200) {
             try {
-                String resString = response.getEntity(String.class);
+                String resString = response.readEntity(String.class);
                 logger.debug(resString);
                 Response res = mapper.readerFor(Response.class).readValue(resString);
                 throw new FayaException(res.getMessage() + " - " + res.getData());
@@ -96,10 +96,10 @@ class HttpClientImpl implements HttpClient {
         }
     }
 
-    private <T> Response<T> getResponse(ClientResponse response, final Class<T> clazz) throws FayaException {
+    private <T> Response<T> getResponse(javax.ws.rs.core.Response response, final Class<T> clazz) throws FayaException {
         this.handleError(response);
         try {
-            String res = response.getEntity(String.class);
+            String res = response.readEntity(String.class);
             logger.debug(res);
             return mapper.readerFor(mapper.getTypeFactory().constructParametricType(Response.class, clazz)).readValue(res);
         } catch (IOException e) {
