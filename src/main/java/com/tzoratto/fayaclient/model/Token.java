@@ -12,7 +12,7 @@ public class Token {
     private String value;
     private String description;
     private int count;
-    private boolean active;
+    private boolean active = true;
     private Instant startsAt;
     private Instant endsAt;
     private Integer pool;
