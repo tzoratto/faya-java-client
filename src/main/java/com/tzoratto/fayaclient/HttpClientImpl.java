@@ -75,7 +75,7 @@ class HttpClientImpl implements HttpClient {
     }
 
     private Invocation.Builder prepareRequest(String endpoint, String authorization) throws FayaException {
-        LOGGER.info(endpoint);
+        LOGGER.debug(endpoint);
         String base64Authorization;
         try {
             base64Authorization = Base64.getEncoder().encodeToString(authorization.getBytes("utf-8"));
