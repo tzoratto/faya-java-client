@@ -25,6 +25,9 @@ class ApiV1Impl implements Api {
     private static final String NAMESPACE_PARAM = "namespace";
 
     ApiV1Impl(String server, String authorization) {
+        if (server == null || authorization == null) {
+            throw new IllegalArgumentException("Faya URL and API key are mandatory");
+        }
         this.server = server;
         this.authorization = authorization;
         this.httpClient = new HttpClientImpl();
