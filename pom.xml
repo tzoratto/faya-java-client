@@ -2,7 +2,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.tzoratto</groupId>
     <artifactId>faya-client</artifactId>
-    <version>0.1.0</version>
+    <version>0.2.0-SNAPSHOT</version>
 
     <name>Faya API client</name>
     <description>Client to communicate with Faya API</description>
@@ -11,7 +11,7 @@
         <url>https://gitlab.tzoratto.com/stav/faya-java-client</url>
         <connection>scm:git:ssh://git@gitlab.tzoratto.com:10022/stav/faya-java-client.git</connection>
         <developerConnection>scm:git:ssh://git@gitlab.tzoratto.com:10022/stav/faya-java-client.git</developerConnection>
-        <tag>faya-client-0.1.0</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <properties>
