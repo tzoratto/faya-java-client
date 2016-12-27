@@ -9,8 +9,8 @@
 
     <scm>
         <url>https://gitlab.tzoratto.com/stav/faya-java-client</url>
-        <connection>scm:git:https://gitlab.tzoratto.com/stav/faya-java-client.git</connection>
-        <developerConnection>scm:git:https://gitlab.tzoratto.com/stav/faya-java-client.git</developerConnection>
+        <connection>scm:git:ssh://git@gitlab.tzoratto.com:10022/stav/faya-java-client.git</connection>
+        <developerConnection>scm:git:ssh://git@gitlab.tzoratto.com:10022/stav/faya-java-client.git</developerConnection>
     </scm>
 
     <properties>
