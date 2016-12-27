@@ -1,4 +1,4 @@
-<project>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.tzoratto</groupId>
     <artifactId>faya-client</artifactId>
@@ -18,6 +18,34 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
+
+    <repositories>
+        <repository>
+            <id>tzoratto_all</id>
+            <name>tzoratto all</name>
+            <url>https://nexus.tzoratto.com/repository/maven-public/</url>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
+
+    <distributionManagement>
+        <repository>
+            <id>tzoratto_release</id>
+            <name>tzoratto release</name>
+            <url>https://nexus.tzoratto.com/repository/maven-releases/</url>
+        </repository>
+        <snapshotRepository>
+            <id>tzoratto_snapshot</id>
+            <name>tzoratto snapshot</name>
+            <url>https://nexus.tzoratto.com/repository/maven-snapshots/</url>
+            <uniqueVersion>false</uniqueVersion>
+        </snapshotRepository>
+    </distributionManagement>
 
     <dependencies>
         <dependency>
