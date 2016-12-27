@@ -17,7 +17,7 @@ try {
             def javaHome = tool 'jdk8'
             def mvnHome = tool 'Maven 3.3.9'
             withEnv(["JAVA_HOME=${javaHome}", "PATH+TOOLS=${javaHome}/bin:${mvnHome}/bin"]) {
-                sh "mvn --batch-mode -V -U -e -Dmaven.repo.local=$WORKSPACE/.repository clean install"
+                sh "mvn --batch-mode -V -U -e -Dmaven.repo.local=$WORKSPACE/.repository clean deploy"
             }
         }
 
